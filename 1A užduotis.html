@@ -36,30 +36,37 @@
 	function drawStartingPosition(step){
 		if (step > 0){
 			step = step -1;
+			
+			// Blue
+			// Sumažinta į 25% pradinio dydžio, panaudota atvaizdas ir jis pasuktas 190 laipsnių kampu bei pakeltas į apačią per 250
 			ctx.fillStyle = "rgb(0,0,255)";
 			ctx.save();
 			ctx.transform(-0.25, 0, 0, 0.25, 0, 250);
-                   	ctx.rotate(Math.PI);
-                   	drawSteps(step);
-			
+            ctx.rotate(Math.PI);
+            drawSteps(step);
+			//red
+			// Sumažinta į 50% pradinio dydžio, pastumptas į dešinę per 250
 			ctx.restore();
 			ctx.fillStyle ="rgb(255,0,0)";
 			ctx.save();
 			ctx.transform(0.5, 0, 0, 0.5, 250, 0);
-                   	drawSteps(step);
-			
+            drawSteps(step);
+			//green
+			// Sumažinta į 50% pradinio dydžio, panaudota atvaizdas ir jis pastumptas į dešinę per 250 bei 250 į apačią
 			ctx.restore();
 			ctx.save();
 			ctx.fillStyle ="rgb(0,255,0)";
 			ctx.transform(-0.5, 0, 0, 0.5, 250, 250);
-                   	drawSteps(step);
-
+            drawSteps(step);
+			//black
+			// Sumažinta į 50% pradinio dydžio, pastumptas į dešinę per 500 bei 250 į apačią
 			ctx.restore();
 			ctx.save();
 			ctx.fillStyle ="rgb(0,0,0)";
 			ctx.transform(0.5, 0, 0, 0.5, 500, 250);
 			ctx.rotate(Math.PI / 2);
-                   	drawSteps(step);
+			drawSteps(step);
+			
 		}
 		else drawFigure();
 	}
