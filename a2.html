@@ -122,12 +122,83 @@
 			scene.add(light);
 
 			var geometryColor = gui.addColor(new ColorGUIHelper(light,'color'), 'value').name('color').listen();
-			//group.children[1].material.color.setHex(0xffff00);
 			geometryColor.onChange(function(value){
 				group.children[0].material.color.setHex('0x' + value.substring(1));
 				group.children[1].material.color.setHex('0x' + value.substring(1));
 			});
 					
+			var DirectionPanel = new function() {
+  			this.x = 0;
+  			this.y = 1;
+			this.z = 0;
+			}
+
+			
+			var direction = gui.addFolder('Direction');
+			var DirectionX = direction.add(DirectionPanel, 'x', -5, 5).listen();
+			var DirectionY = direction.add(DirectionPanel, 'y', -5, 5).listen();
+			var DirectionZ = direction.add(DirectionPanel, 'z', -5, 5).listen();
+			direction.open();
+
+			DirectionX.onChange(function(value)
+			{ 
+			const end = new THREE.Vector3(originPanel.x, originPanel.y, originPanel.z);
+            const start = new THREE.Vector3(DirectionPanel.x, DirectionPanel.y, DirectionPanel.z);
+
+			var DirectionVector = new THREE.Vector3();
+            var DirectionNormalize = new THREE.Vector3();
+            DirectionVector.subVectors(start, end);
+            DirectionNormalize.subVectors(start, end).normalize();
+
+			var axis = new THREE.Vector3(0, 1, 0);
+            group.quaternion.setFromUnitVectors(axis, DirectionVector.clone().normalize());
+            group.position.copy(DirectionVector.clone().multiplyScalar(10));
+
+			group.position.x = originPanel.x
+			group.position.y = originPanel.y
+			group.position.z = originPanel.z
+
+			});
+			
+			DirectionY.onChange(function(value)
+			{ 
+				const end = new THREE.Vector3(originPanel.x, originPanel.y, originPanel.z);
+            const start = new THREE.Vector3(DirectionPanel.x, DirectionPanel.y, DirectionPanel.z);
+
+			var DirectionVector = new THREE.Vector3();
+            var DirectionNormalize = new THREE.Vector3();
+            DirectionVector.subVectors(start, end);
+            DirectionNormalize.subVectors(start, end).normalize();
+
+			var axis = new THREE.Vector3(0, 1, 0);
+            group.quaternion.setFromUnitVectors(axis, DirectionVector.clone().normalize());
+            group.position.copy(DirectionVector.clone().multiplyScalar(1));
+
+			group.position.x = originPanel.x
+			group.position.y = originPanel.y
+			group.position.z = originPanel.z
+				
+			});
+			
+			DirectionZ.onChange(function(value)
+			{ 
+				const end = new THREE.Vector3(originPanel.x, originPanel.y, originPanel.z);
+            const start = new THREE.Vector3(DirectionPanel.x, DirectionPanel.y, DirectionPanel.z);
+
+			var DirectionVector = new THREE.Vector3();
+            var DirectionNormalize = new THREE.Vector3();
+            DirectionVector.subVectors(start, end);
+            DirectionNormalize.subVectors(start, end).normalize();
+
+			var axis = new THREE.Vector3(0, 1, 0);
+            group.quaternion.setFromUnitVectors(axis, DirectionVector.clone().normalize());
+            group.position.copy(DirectionVector.clone().multiplyScalar(1));
+
+			group.position.x = originPanel.x
+			group.position.y = originPanel.y
+			group.position.z = originPanel.z
+				
+			});
 
 			camera.position.z = 25;
 
