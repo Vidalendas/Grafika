@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>2A</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="three.js"></script>
+		<script type="text/javascript" src="OrbitControls.js"></script>
+		<script type="text/javascript" src="dat.gui.min.js"></script>
+		<script>
+            // Nustatome sceną ir kamera
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+            //pridedame kameros kontroliavimą
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.update();
+
+            // pridedame ašis
+            const axesHelper = new THREE.AxesHelper( 50 );
+            scene.add( axesHelper );
+
+            //pridedame apšviedimą
+
+            const light = new THREE.AmbientLight( 0x404040 );
+            scene.add( light );
+
+            const spotLight = new THREE.SpotLight( 0xffffff );
+            spotLight.position.set( 100, 1000, 100 );
+
+            spotLight.castShadow = true;
+
+            spotLight.shadow.mapSize.width = 1024;
+            spotLight.shadow.mapSize.height = 1024;
+
+            spotLight.shadow.camera.near = 500;
+            spotLight.shadow.camera.far = 4000;
+            spotLight.shadow.camera.fov = 30;
+
+            scene.add( spotLight );
+          
+            const SphereGeomtry = new THREE.SphereGeometry(0.05);
+            
+            //pridedame BoxGeometry
+			const BoxGeometry = new THREE.BoxGeometry( 0.55, 0.55, 0.55);
+            const BoxMaterial = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
+            BoxMaterial.wireframe = true;
+            const cube = new THREE.Mesh( BoxGeometry, BoxMaterial );
+            const CubeGroup = new THREE.Group();
+            CubeGroup.add(cube);
+            
+            const CubeSphereMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
+            for (var i=0; i < 162; i=i+3){
+                const Sphere = new THREE.Mesh(SphereGeomtry, CubeSphereMaterial);
+                Sphere.position.x = cube.geometry.attributes.position.array[i];
+                Sphere.position.y = cube.geometry.attributes.position.array[i+1];
+                Sphere.position.z = cube.geometry.attributes.position.array[i+2];
+                CubeGroup.add(Sphere);
+            }
+           scene.add(CubeGroup);
+
+            
+            // pridedame OctahedronGeometry 
+            const OctahedronGeometry = new THREE.OctahedronGeometry( 0.58, 1, 1 );
+            const OctahedronMaterial = new THREE.MeshPhongMaterial( {color: 0x00ffff} );
+            OctahedronMaterial.wireframe = true;
+            const Octahedron = new THREE.Mesh( OctahedronGeometry, OctahedronMaterial );
+            const OctahedronGroup = new THREE.Group();
+            OctahedronGroup.add(Octahedron);
+            const OctahedronSphereMaterial = new THREE.MeshPhongMaterial({color: 0x00ffff})
+           
+            for (var i=0; i < 288; i=i+3){
+                const Sphere = new THREE.Mesh(SphereGeomtry, OctahedronSphereMaterial);
+                Sphere.position.x = Octahedron.geometry.attributes.position.array[i];
+                Sphere.position.y = Octahedron.geometry.attributes.position.array[i+1];
+                Sphere.position.z = Octahedron.geometry.attributes.position.array[i+2];
+                OctahedronGroup.add(Sphere);
+            }
+           scene.add(OctahedronGroup);
+        
+           
+            //pridedame TetrahedronGeometry
+            const TetrahedronGeometry = new THREE.TetrahedronGeometry(1);
+            const TetrahedronMaterial = new THREE.MeshPhongMaterial( {color: 0xff489e} );
+            TetrahedronMaterial.wireframe = true;
+            const Tetrahadron = new THREE.Mesh(TetrahedronGeometry, TetrahedronMaterial);
+            const TetrahadronGroup = new THREE.Group();
+            //TetrahadronGroup.add(Tetrahadron);
+
+            const TetrahadronSphereMaterial = new THREE.MeshPhongMaterial({color: 0xff489e})
+
+            for (var i=0; i < 36; i=i+3){
+                const Sphere = new THREE.Mesh(SphereGeomtry, TetrahadronSphereMaterial);
+                Sphere.position.x = Tetrahadron.geometry.attributes.position.array[i];
+                Sphere.position.y = Tetrahadron.geometry.attributes.position.array[i+1];
+                Sphere.position.z = Tetrahadron.geometry.attributes.position.array[i+2];
+                TetrahadronGroup.add(Sphere);
+            }
+           scene.add(TetrahadronGroup);
+
+            //pridedame DodecahedronGeometry 
+			const DodecahedronGeometry = new THREE.DodecahedronGeometry(1);
+            const DodecahedronMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
+            DodecahedronMaterial.wireframe = true;
+            const Dodecahdron = new THREE.Mesh(DodecahedronGeometry, DodecahedronMaterial);
+            const DodecahdronGroup = new THREE.Group();
+            DodecahdronGroup.add(Dodecahdron);
+            const DodecahdronSphereMaterial = new THREE.MeshPhongMaterial({color: 0xffff00})
+
+            for (var i=0; i < 324; i=i+3){
+                const Sphere = new THREE.Mesh(SphereGeomtry, DodecahdronSphereMaterial);
+                Sphere.position.x = Dodecahdron.geometry.attributes.position.array[i];
+                Sphere.position.y = Dodecahdron.geometry.attributes.position.array[i+1];
+                Sphere.position.z = Dodecahdron.geometry.attributes.position.array[i+2];
+                DodecahdronGroup.add(Sphere);
+            }
+           scene.add(DodecahdronGroup);
+
+          
+           //pridedame kontrolės pultą 
+            parameters = {
+                Dodecahdronvisible: true,
+                Tetrahadronvisble: true,
+                Octahedronvisible: true,
+                Cubevisible: true
+            }
+            Dodecahdron.visible = false;
+            Tetrahadron.visible = false;
+            Octahedron.visible = false;
+            cube.visible = false;
+
+			var gui = new dat.GUI();
+            var DodecahdronVisible = gui.add(parameters, 'Dodecahdronvisible').name('Dodecahdron').listen();
+            var TetrahadronVisble = gui.add(parameters, 'Tetrahadronvisble').name('Tetrahadron').listen();
+            var OctahedronVisible = gui.add(parameters, 'Octahedronvisible').name('Octahedron').listen();
+            var CubeVisible = gui.add(parameters, 'Cubevisible').name('Cube').listen();
+
+            DodecahdronVisible.onChange(function(value){
+                DodecahdronGroup.visible = value;
+                DodecahdronCylindersGroup.visible = value;
+            });
+            TetrahadronVisble.onChange(function(value){
+                TetrahadronGroup.visible = value;
+                TertahadronCylindersGroup.visible = value;
+            });
+            OctahedronVisible.onChange(function(value){
+                OctahedronGroup.visible = value;
+                OctahedronCylindersGroup.visible = value;
+            });
+            CubeVisible.onChange(function(value){
+                CubeGroup.visible = value;
+                cubeCylindersGroup.visible = value;
+            });
+            
+            // darome cilindrus
+            // tam kad turetume tik krastiniu cilindrus skaiciuojame atstuma tarp tasku 
+            var lengthOneStart = new THREE.Vector3(Dodecahdron.geometry.attributes.position.array[0], Dodecahdron.geometry.attributes.position.array[1], Dodecahdron.geometry.attributes.position.array[2]);
+            var lengthOneEnd = new THREE.Vector3(Dodecahdron.geometry.attributes.position.array[3], Dodecahdron.geometry.attributes.position.array[4], Dodecahdron.geometry.attributes.position.array[5]);
+            
+            var lengthTwoStart = new THREE.Vector3(Dodecahdron.geometry.attributes.position.array[18], Dodecahdron.geometry.attributes.position.array[19], Dodecahdron.geometry.attributes.position.array[20]);
+            var lengthTwoEnd = new THREE.Vector3(Dodecahdron.geometry.attributes.position.array[21], Dodecahdron.geometry.attributes.position.array[22], Dodecahdron.geometry.attributes.position.array[23]);
+            
+            const DodecahdronCylindersGroup = new THREE.Group();
+            
+
+            for (var i = 0; i <323; i=i+3){
+            const start = new THREE.Vector3(Dodecahdron.geometry.attributes.position.array[i], Dodecahdron.geometry.attributes.position.array[i+1], Dodecahdron.geometry.attributes.position.array[i+2]);
+            const end = new THREE.Vector3(Dodecahdron.geometry.attributes.position.array[i+3],Dodecahdron.geometry.attributes.position.array[i+4],Dodecahdron.geometry.attributes.position.array[i+5]);
+                
+                if(lengthOneStart.distanceTo(lengthOneEnd) == start.distanceTo(end)
+                || lengthTwoStart.distanceTo(lengthTwoEnd) == start.distanceTo(end)
+                ){
+                    
+            
+            var CylinderVector = new THREE.Vector3();
+            var CylinderVectorNormalize = new THREE.Vector3();
+            CylinderVector.subVectors(start, end);
+            CylinderVectorNormalize.subVectors(start, end).normalize();
+            
+            var CylinderMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
+            var CylinderGeometry = new THREE.CylinderGeometry(0.025, 0.025, CylinderVector.length()); 
+            const cylinders = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+
+
+           
+            var axis = new THREE.Vector3(0, 1, 0);
+            cylinders.quaternion.setFromUnitVectors(axis, CylinderVector.clone().normalize());
+            cylinders.position.copy(CylinderVector.clone().multiplyScalar(0.5));
+   
+            cylinders.position.x = (Dodecahdron.geometry.attributes.position.array[i] + Dodecahdron.geometry.attributes.position.array[i+3])/2;
+            cylinders.position.y = (Dodecahdron.geometry.attributes.position.array[i+1] + Dodecahdron.geometry.attributes.position.array[i+4])/2;
+            cylinders.position.z = (Dodecahdron.geometry.attributes.position.array[i+2] + Dodecahdron.geometry.attributes.position.array[i+5])/2;
+
+            DodecahdronCylindersGroup.add(cylinders);
+            
+           
+                }
+                else{
+
+                }
+            }
+            scene.add(DodecahdronCylindersGroup);
+
+            //Tertahadron cilindrai
+            const TertahadronCylindersGroup = new THREE.Group();
+            const Tertahadronstart = new THREE.Vector3(Tetrahadron.geometry.attributes.position.array[i], Tetrahadron.geometry.attributes.position.array[i+1], Tetrahadron.geometry.attributes.position.array[i+2]);
+            const Tertahadronend = new THREE.Vector3(Tetrahadron.geometry.attributes.position.array[i+3],Tetrahadron.geometry.attributes.position.array[i+4],Tetrahadron.geometry.attributes.position.array[i+5]);
+            
+           for(var i = 0; i<36; i=i+3)
+           {
+            const start = new THREE.Vector3(Tetrahadron.geometry.attributes.position.array[i], Tetrahadron.geometry.attributes.position.array[i+1], Tetrahadron.geometry.attributes.position.array[i+2]);
+            const end = new THREE.Vector3(Tetrahadron.geometry.attributes.position.array[i+3],Tetrahadron.geometry.attributes.position.array[i+4],Tetrahadron.geometry.attributes.position.array[i+5]);
+
+                 
+            var CylinderVector = new THREE.Vector3();
+            var CylinderVectorNormalize = new THREE.Vector3();
+            CylinderVector.subVectors(start, end);
+            CylinderVectorNormalize.subVectors(start, end).normalize();
+            
+            var CylinderMaterial = new THREE.MeshPhongMaterial({color: 0xff489e});
+            var CylinderGeometry = new THREE.CylinderGeometry(0.025, 0.025, CylinderVector.length()); 
+            const cylinders = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+
+
+           
+            var axis = new THREE.Vector3(0, 1, 0);
+            cylinders.quaternion.setFromUnitVectors(axis, CylinderVector.clone().normalize());
+            cylinders.position.copy(CylinderVector.clone().multiplyScalar(0.5));
+   
+            cylinders.position.x = (Tetrahadron.geometry.attributes.position.array[i] + Tetrahadron.geometry.attributes.position.array[i+3])/2;
+            cylinders.position.y = (Tetrahadron.geometry.attributes.position.array[i+1] + Tetrahadron.geometry.attributes.position.array[i+4])/2;
+            cylinders.position.z = (Tetrahadron.geometry.attributes.position.array[i+2] + Tetrahadron.geometry.attributes.position.array[i+5])/2;
+
+            TertahadronCylindersGroup.add(cylinders);
+          
+            }
+          
+           scene.add(TertahadronCylindersGroup);
+            
+            //Octahedron cilindrai
+            
+            const OctahedronCylindersGroup = new THREE.Group();
+            const Octahedronstart = new THREE.Vector3(Octahedron.geometry.attributes.position.array[0], Octahedron.geometry.attributes.position.array[1], Octahedron.geometry.attributes.position.array[2]);
+            const Octahedronend = new THREE.Vector3(Octahedron.geometry.attributes.position.array[3],Octahedron.geometry.attributes.position.array[4],Octahedron.geometry.attributes.position.array[5]);
+            const OctahedTwostart = new THREE.Vector3(Octahedron.geometry.attributes.position.array[3], Octahedron.geometry.attributes.position.array[4], Octahedron.geometry.attributes.position.array[5]);
+            const OctahedrTwoend = new THREE.Vector3(Octahedron.geometry.attributes.position.array[6],Octahedron.geometry.attributes.position.array[7],Octahedron.geometry.attributes.position.array[8]);
+            
+           for(var i = 0; i<300; i=i+3)
+           {
+            const start = new THREE.Vector3(Octahedron.geometry.attributes.position.array[i], Octahedron.geometry.attributes.position.array[i+1], Octahedron.geometry.attributes.position.array[i+2]);
+            const end = new THREE.Vector3(Octahedron.geometry.attributes.position.array[i+3],Octahedron.geometry.attributes.position.array[i+4],Octahedron.geometry.attributes.position.array[i+5]);
+            if(Octahedronstart.distanceTo(Octahedronend) == start.distanceTo(end)
+            || OctahedTwostart.distanceTo(OctahedrTwoend) == start.distanceTo(end)){
+                 
+           
+                var CylinderVector = new THREE.Vector3();
+            var CylinderVectorNormalize = new THREE.Vector3();
+            CylinderVector.subVectors(start, end);
+            CylinderVectorNormalize.subVectors(start, end).normalize();
+            
+            var CylinderMaterial = new THREE.MeshPhongMaterial({color: 0x00ffff});
+            var CylinderGeometry = new THREE.CylinderGeometry(0.025, 0.025, CylinderVector.length()); 
+            const cylinders = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+
+
+           
+            var axis = new THREE.Vector3(0, 1, 0);
+            cylinders.quaternion.setFromUnitVectors(axis, CylinderVector.clone().normalize());
+            cylinders.position.copy(CylinderVector.clone().multiplyScalar(0.5));
+   
+            cylinders.position.x = (Octahedron.geometry.attributes.position.array[i] + Octahedron.geometry.attributes.position.array[i+3])/2;
+            cylinders.position.y = (Octahedron.geometry.attributes.position.array[i+1] + Octahedron.geometry.attributes.position.array[i+4])/2;
+            cylinders.position.z = (Octahedron.geometry.attributes.position.array[i+2] + Octahedron.geometry.attributes.position.array[i+5])/2;
+
+            OctahedronCylindersGroup.add(cylinders);
+          
+            }
+            else{
+
+            }
+        }
+        
+            scene.add(OctahedronCylindersGroup);
+            
+            //cube cilindrai
+            const cubeCylindersGroup = new THREE.Group();
+            const cubestart = new THREE.Vector3(cube.geometry.attributes.position.array[0], cube.geometry.attributes.position.array[1], cube.geometry.attributes.position.array[2]);
+            const cubeend = new THREE.Vector3(cube.geometry.attributes.position.array[3],cube.geometry.attributes.position.array[4],cube.geometry.attributes.position.array[5]);
+            const cubeTwoStart = new THREE.Vector3(cube.geometry.attributes.position.array[48], cube.geometry.attributes.position.array[49], cube.geometry.attributes.position.array[50]);
+            const cubeTwoEnd = new THREE.Vector3(cube.geometry.attributes.position.array[51],cube.geometry.attributes.position.array[52],cube.geometry.attributes.position.array[53]);
+            
+           for(var i = 0; i<70; i=i+3)
+           {
+            const start = new THREE.Vector3(cube.geometry.attributes.position.array[i], cube.geometry.attributes.position.array[i+1], cube.geometry.attributes.position.array[i+2]);
+            const end = new THREE.Vector3(cube.geometry.attributes.position.array[i+3],cube.geometry.attributes.position.array[i+4],cube.geometry.attributes.position.array[i+5]);
+            
+                if(cubestart.distanceTo(cubeend) == start.distanceTo(end)
+                || cubeTwoStart.distanceTo(cubeTwoEnd) == start.distanceTo(end)){
+                 
+           
+            var CylinderVector = new THREE.Vector3();
+            var CylinderVectorNormalize = new THREE.Vector3();
+            CylinderVector.subVectors(start, end);
+            CylinderVectorNormalize.subVectors(start, end).normalize();
+            
+            var CylinderMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
+            var CylinderGeometry = new THREE.CylinderGeometry(0.025, 0.025, CylinderVector.length()); 
+            const cylinders = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+
+
+           
+            var axis = new THREE.Vector3(0, 1, 0);
+            cylinders.quaternion.setFromUnitVectors(axis, CylinderVector.clone().normalize());
+            cylinders.position.copy(CylinderVector.clone().multiplyScalar(0.5));
+   
+            cylinders.position.x = (cube.geometry.attributes.position.array[i] + cube.geometry.attributes.position.array[i+3])/2;
+            cylinders.position.y = (cube.geometry.attributes.position.array[i+1] + cube.geometry.attributes.position.array[i+4])/2;
+            cylinders.position.z = (cube.geometry.attributes.position.array[i+2] + cube.geometry.attributes.position.array[i+5])/2;
+
+            cubeCylindersGroup.add(cylinders);
+          
+            }
+            else{
+
+            }
+        }
+
+        var CylinderMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
+        var CylinderGeometry = new THREE.CylinderGeometry(0.025, 0.025, CylinderVector.length());
+        cubecylinder1 = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+        cubecylinder1.position.z = cube.geometry.attributes.position.array[1];
+        cubecylinder1.position.x = cube.geometry.attributes.position.array[1];
+        cubecylinder2 = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+        cubecylinder2.position.z = cube.geometry.attributes.position.array[1];
+        cubecylinder2.position.x = cube.geometry.attributes.position.array[1] * (-1);
+        cubecylinder3 = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+        cubecylinder3.position.z = cube.geometry.attributes.position.array[1] * (-1);
+        cubecylinder3.position.x = cube.geometry.attributes.position.array[1];
+        cubecylinder0 = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
+        cubecylinder0.position.z = cube.geometry.attributes.position.array[1] * (-1);
+        cubecylinder0.position.x = cube.geometry.attributes.position.array[1] * (-1);
+        cubeCylindersGroup.add(cubecylinder1);
+        cubeCylindersGroup.add(cubecylinder2);
+        cubeCylindersGroup.add(cubecylinder3);
+        cubeCylindersGroup.add(cubecylinder0);
+
+        scene.add(cubeCylindersGroup);
+            
+        
+        
+        camera.position.z = 5;
+
+			const animate = function () {
+				
+				
+				requestAnimationFrame( animate );
+				controls.update();
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>

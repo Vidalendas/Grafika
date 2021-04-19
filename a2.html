@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>2A</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="three.js"></script>
+		<script type="text/javascript" src="OrbitControls.js"></script>
+		<script type="text/javascript" src="dat.gui.min.js"></script>
+		<script>
+            // Nustatome sceną ir kamera
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+
+			const renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+            //pridedame kameros kontroliavimą
+			const controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.update();
+
+
+            // pridedame ašis
+            const axesHelper = new THREE.AxesHelper( 50 );
+            scene.add( axesHelper );
+			// defaultinės rodyklės reikšmės
+			var arrowLenght =3;
+
+            //pridedame cilindra
+			cylinder = new THREE.Mesh(new THREE.CylinderGeometry(1, 1, arrowLenght*(2/3)), new THREE.MeshBasicMaterial( {color: 0xFFFFFF} ));
+            scene.add( cylinder );
+		
+			// pastumiam cilindrą, kad būtų origin (0,0) pozicijoje
+			cylinder.position.y = arrowLenght/3;
+
+			//pridedame kūgį
+			cone = new THREE.Mesh(new THREE.ConeGeometry(2, arrowLenght/3), new THREE.MeshBasicMaterial( {color: 0xFFFFFF} ));
+            scene.add( cone );
+
+			//yellow 0xffff00 red 0xFF0000 blue: 0x0000FF
+			
+			// uždedame kūgį and cilindro
+			cone.position.y = arrowLenght * 0.83;
+
+			const group = new THREE.Group();
+			group.add(cone);
+			group.add(cylinder);
+			scene.add(group);
+
+
+			// pridedame origin valdymo objektą
+			var originPanel = new function() {
+  			this.x = 0;
+  			this.y = 0;
+			this.z = 0;
+			}
+
+			var arrowParamters = new function(){
+				this.length = 3;
+				this.radius = 2;
+			}
+			
+			//pridedame kontrolės pultą 
+			var gui = new dat.GUI();
+
+			// pridedam aplanką rodyklės pozicijai modifikuoti
+			var origin = gui.addFolder('Origin');
+			var arrowX = origin.add(originPanel, 'x', -15, 15).listen();
+			var arrowY = origin.add(originPanel, 'y', -15, 15).listen();
+			var arrowZ = origin.add(originPanel, 'z', -15, 15).listen();
+			origin.open();
+			
+			// pridedame rodyklės stumdymą
+			arrowX.onChange(function(value)
+			{ group.position.x = value});
+			
+			arrowY.onChange(function(value)
+			{ group.position.y = value});
+			
+			arrowZ.onChange(function(value)
+			{ group.position.z = value});
+
+			
+			// pridedam rodyklės ilgiui modifikuoti valdiklius
+
+			var arrowlength = gui.add(arrowParamters,'length', 3, 15).listen();
+
+			arrowlength.onChange(function(value){
+				group.scale.y = value -2;
+			});
+
+			// pridedam valdiklius rodyklės pločiui 
+			var arrowRadius = gui.add(arrowParamters, 'radius', 2,15).listen();
+			
+			arrowRadius.onChange(function(value){
+				group.scale.x = value -1;
+				group.scale.z = value -1;
+			});
+
+			//pridedam spalvos pasirinkimus
+			class ColorGUIHelper {
+				constructor(object, prop) {
+				this.object = object;
+				this.prop = prop;
+				}
+				get value() {
+				return `#${this.object[this.prop].getHexString()}`;
+				}
+				set value(hexString) {
+				this.object[this.prop].set(hexString);
+				}
+			}
+			const color = 0xFFFFFF;
+			const intensity = 1;
+			const light = new THREE.AmbientLight(color, intensity);
+			scene.add(light);
+
+			var geometryColor = gui.addColor(new ColorGUIHelper(light,'color'), 'value').name('color').listen();
+			//group.children[1].material.color.setHex(0xffff00);
+			geometryColor.onChange(function(value){
+				group.children[0].material.color.setHex('0x' + value.substring(1));
+				group.children[1].material.color.setHex('0x' + value.substring(1));
+			});
+					
+
+			camera.position.z = 25;
+
+			const animate = function () {
+				
+				
+				requestAnimationFrame( animate );
+				controls.update();
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
