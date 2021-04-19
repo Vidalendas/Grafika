@@ -51,7 +51,7 @@
             const SphereGeomtry = new THREE.SphereGeometry(0.05);
             
             //pridedame BoxGeometry
-			const BoxGeometry = new THREE.BoxGeometry( 0.55, 0.55, 0.55);
+			const BoxGeometry = new THREE.BoxGeometry( 0.365, 0.365, 0.365);
             const BoxMaterial = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
             BoxMaterial.wireframe = true;
             const cube = new THREE.Mesh( BoxGeometry, BoxMaterial );
@@ -70,7 +70,7 @@
 
             
             // pridedame OctahedronGeometry 
-            const OctahedronGeometry = new THREE.OctahedronGeometry( 0.58, 1, 1 );
+            const OctahedronGeometry = new THREE.OctahedronGeometry( 0.58, 0, 1 );
             const OctahedronMaterial = new THREE.MeshPhongMaterial( {color: 0x00ffff} );
             OctahedronMaterial.wireframe = true;
             const Octahedron = new THREE.Mesh( OctahedronGeometry, OctahedronMaterial );
@@ -315,8 +315,6 @@
             var CylinderMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
             var CylinderGeometry = new THREE.CylinderGeometry(0.025, 0.025, CylinderVector.length()); 
             const cylinders = new THREE.Mesh(CylinderGeometry, CylinderMaterial);
-
-
            
             var axis = new THREE.Vector3(0, 1, 0);
             cylinders.quaternion.setFromUnitVectors(axis, CylinderVector.clone().normalize());
